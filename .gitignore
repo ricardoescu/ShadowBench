@@ -1,0 +1,21 @@
+# Virtual environments
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Django
+db.sqlite3
+
+# Secrets
+.env
+*.env
+
+# PyCharm
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
