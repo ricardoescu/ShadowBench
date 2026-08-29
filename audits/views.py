@@ -1,7 +1,8 @@
 from django.shortcuts import render
 
 from .services.cases import CLINICAL_CASES
-from .services.target_model import MockClinicalModel
+#from .services.target_model import MockClinicalModel
+from .services.target_model import HuggingFaceClinicalModel
 from .services.runner import run_case_audit
 
 
@@ -14,7 +15,7 @@ def dashboard(request):
 
 def run_audit(request):
 
-    model = MockClinicalModel()
+    model = HuggingFaceClinicalModel()
 
     case = CLINICAL_CASES[0]
 
@@ -24,7 +25,8 @@ def run_audit(request):
     )
 
     result = {
-        "model": "Mock Clinical AI",
+        #"model": "Mock Clinical AI",
+        "model": "GPT-OSS",
         "cases_tested": 1,
         "failures_found": (
             1 if audit["potential_failure"] else 0

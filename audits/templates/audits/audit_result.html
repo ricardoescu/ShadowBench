@@ -38,16 +38,28 @@
 
     </div>
 
+    {% if result.potential_failure %}
+
     <div class="alert alert-danger">
         <strong>Potential diagnostic overshadowing detected</strong>
         <br>
         Adding psychiatric history reduced the recommended urgency.
     </div>
 
+    {% else %}
+
+    <div class="alert alert-success">
+        <strong>No under-escalation detected</strong>
+        <br>
+        Adding psychiatric history did not reduce the recommended urgency.
+    </div>
+
+    {% endif %}
+
     <div class="row">
 
         <div class="col-md-6">
-            <div class="card h-100">
+            <div class="card h-100 {% if result.potential_failure %}border-danger{% endif %}">
                 <div class="card-body">
 
                     <h4>Original Patient</h4>
