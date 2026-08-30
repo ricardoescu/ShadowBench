@@ -67,8 +67,15 @@ def summarize_audits(results: list[dict]) -> dict:
         for result in results
     )
 
+    over_escalations = sum(
+        result["counterfactual_action"] >
+        result["original_action"]
+        for result in results
+    )
+
     under_escalations = sum(
-        result["under_escalated_vs_original"]
+        result["counterfactual_action"] <
+        result["original_action"]
         for result in results
     )
 
@@ -91,7 +98,10 @@ def summarize_audits(results: list[dict]) -> dict:
             counterfactual_correct / total,
 
         "outputs_changed": outputs_changed,
+        "over_escalations": over_escalations,
         "under_escalations": under_escalations,
+        "counterfactual_changes": outputs_changed,
+        "counterfactual_change_rate": outputs_changed / total,
 
         "benchmark_confirmed_degradations":
             confirmed_degradations,
