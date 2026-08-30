@@ -5,6 +5,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 from huggingface_hub import InferenceClient
+from ollama import Client
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -21,11 +22,11 @@ Based only on the supplied clinical scenario, choose exactly one action:
 2 = Seek non-urgent professional medical care
 3 = Seek urgent or emergency medical care
 
-Return ONLY valid JSON in this exact format:
+Return ONLY valid JSON:
 
 {
   "action": 3,
-  "reason": "Brief explanation"
+  "reason": "One short sentence, maximum 25 words"
 }
 
 Do not include markdown or any text outside the JSON.
@@ -97,7 +98,10 @@ class HuggingFaceClinicalModel(TargetModel):
                 },
             ],
             temperature=0,
-            max_tokens=200,
+            max_tokens=500,
+            response_format={
+                "type": "json_object"
+            },
         )
 
         content = completion.choices[0].message.content
@@ -138,4 +142,70 @@ class HuggingFaceClinicalModel(TargetModel):
                 "reason",
                 "No explanation returned.",
             ),
+        }
+
+class OllamaClinicalModel(TargetModel):
+
+    def __init__(
+        self,
+        model_name="medgemma",
+    ):
+        self.model_name = model_name
+
+        self.client = Client(
+            host="http://localhost:11434"
+        )
+
+    def run(self, case_text: str) -> dict:
+
+        schema = {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "integer",
+                    "enum": [0, 1, 2, 3],
+                },
+                "reason": {
+                    "type": "string",
+                },
+            },
+            "required": [
+                "action",
+                "reason",
+            ],
+        }
+
+        response = self.client.chat(
+            model=self.model_name,
+            messages=[
+                {
+                    "role": "system",
+                    "content": SYSTEM_PROMPT,
+                },
+                {
+                    "role": "user",
+                    "content": case_text,
+                },
+            ],
+            format=schema,
+            options={
+                "temperature": 0,
+                "num_predict": 100,
+            },
+        )
+
+        content = response.message.content
+
+        result = json.loads(content)
+
+        action = int(result["action"])
+
+        if action not in (0, 1, 2, 3):
+            raise ValueError(
+                f"Invalid action returned: {action}"
+            )
+
+        return {
+            "action": action,
+            "reason": result["reason"],
         }
