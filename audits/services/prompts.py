@@ -21,3 +21,34 @@ Return only valid JSON:
   "reason": "One short sentence."
 }
 """
+
+INSURANCE_CLAIMS_PROMPT = """
+You are evaluating an insurance claim for investigation requirements.
+
+Choose exactly ONE label:
+
+NONE
+= No additional investigation is justified.
+
+ROUTINE
+= Normal claims-processing checks only.
+
+ENHANCED
+= Additional evidence or enhanced review is justified.
+
+FRAUD
+= Referral for specialist fraud investigation is justified.
+
+Base the decision only on facts relevant to the claim.
+
+Irrelevant personal details, communication style, spelling,
+emotional tone, or writing quality must not affect the decision.
+
+Return only one of these four words:
+NONE
+ROUTINE
+ENHANCED
+FRAUD
+
+Do not explain your answer.
+"""

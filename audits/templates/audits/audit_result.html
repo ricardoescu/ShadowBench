@@ -14,120 +14,103 @@
 
 <div class="container py-5">
 
-    <a href="/" class="text-decoration-none">
-        ← Back
-    </a>
+    <a href="/" class="text-decoration-none">← Back</a>
 
-    <h1 class="mt-3">Audit Results</h1>
+    <h1 class="mt-4 mb-4">Audit Results</h1>
 
-    <div class="row my-4">
-
-        <div class="col">
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
             <div class="card p-3">
-                <h2>{{ result.cases_tested }}</h2>
-                <span>Cases tested</span>
+                <h2>{{ cases_tested }}</h2>
+                <div>Cases tested</div>
             </div>
         </div>
 
-        <div class="col">
+        <div class="col-md-6">
             <div class="card p-3">
-                <h2>{{ result.failures_found }}</h2>
-                <span>Potential failures</span>
+                <h2>{{ potential_failures }}</h2>
+                <div>Decision inconsistencies found</div>
             </div>
         </div>
-
     </div>
-
-    {% if result.potential_failure %}
 
     <div class="alert alert-danger">
-        <strong>Potential diagnostic overshadowing detected</strong>
-        <br>
-        Adding psychiatric history reduced the recommended urgency.
+        <strong>Counterfactual inconsistency detected</strong><br>
+        Identical claim facts received different investigation
+        decisions after an irrelevant communication change.
     </div>
 
-    {% else %}
+    {% for result in failures %}
 
-    <div class="alert alert-success">
-        <strong>No under-escalation detected</strong>
-        <br>
-        Adding psychiatric history did not reduce the recommended urgency.
-    </div>
+        <div class="card mb-4">
+            <div class="card-body">
 
-    {% endif %}
+                <div class="d-flex justify-content-between">
+                    <h4>{{ result.case_id }}</h4>
 
-    <div class="row">
+                    <span class="badge bg-danger">
+                        Decision changed
+                    </span>
+                </div>
 
-        <div class="col-md-6">
-            <div class="card h-100 {% if result.potential_failure %}border-danger{% endif %}">
-                <div class="card-body">
+                <div class="row mt-3">
 
-                    <h4>Original Patient</h4>
+                    <div class="col-md-6">
+                        <div class="border rounded p-3 h-100">
 
-                    <p>
-                        {{ result.original_case }}
-                    </p>
+                            <h5>Original claim</h5>
 
-                    <hr>
+                            <p>{{ result.original_text }}</p>
 
-                    <strong>AI recommendation</strong>
+                            <hr>
 
-                    <p class="mt-2">
-                        {{ result.original_label }}
-                    </p>
+                            <strong>Investigation level</strong>
 
-                    <p class="text-muted">
-                        {{ result.original_response }}
-                    </p>
+                            <h4 class="mt-2">
+                                {{ result.original_action }}
+                            </h4>
+
+                            <p class="text-muted">
+                                {{ result.original_reason }}
+                            </p>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="border border-danger rounded p-3 h-100">
+
+                            <h5>Shadow case</h5>
+
+                            <p>{{ result.counterfactual_text }}</p>
+
+                            <hr>
+
+                            <strong>Investigation level</strong>
+
+                            <h4 class="mt-2">
+                                {{ result.counterfactual_action }}
+                            </h4>
+
+                            <p class="text-muted">
+                                {{ result.counterfactual_reason }}
+                            </p>
+
+                        </div>
+                    </div>
 
                 </div>
+
+                <div class="mt-3">
+                    <strong>What changed?</strong>
+                    Only the claimant's communication tone.
+                    The underlying claim facts were held constant.
+                </div>
+
             </div>
         </div>
 
-        <div class="col-md-6">
-            <div class="card h-100 border-danger">
-                <div class="card-body">
-
-                    <h4>Counterfactual Patient</h4>
-
-                    <p>
-                        {{ result.counterfactual_case }}
-                    </p>
-
-                    <hr>
-
-                    <strong>AI recommendation</strong>
-
-                    <p class="mt-2">
-                        {{ result.counterfactual_label }}
-                    </p>
-
-                    <p class="text-muted">
-                        {{ result.counterfactual_response }}
-                    </p>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="card mt-4">
-        <div class="card-body">
-
-            <h4>What changed?</h4>
-
-            <p>
-                The physical symptoms were identical.
-                The only added information was a history of schizophrenia.
-            </p>
-
-            <strong>
-            Severity: {{ result.severity }}
-            </strong>
-
-        </div>
-    </div>
+    {% endfor %}
 
 </div>
 

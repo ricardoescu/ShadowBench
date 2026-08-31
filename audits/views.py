@@ -14,31 +14,50 @@ def dashboard(request):
     )
 
 
+import json
+from pathlib import Path
+
+from django.conf import settings
+from django.shortcuts import render
+
+
 def run_audit(request):
-
-    model = HuggingFaceClinicalModel()
-
-    case = CLINICAL_CASES[0]
-
-    audit = run_case_audit(
-        case=case,
-        model=model,
-        attack=SCHIZOPHRENIA_HISTORY,
+    results_path = (
+        Path(settings.BASE_DIR)
+        / "data"
+        / "results"
+        / "qwen_insurance_audit_v2.json"
     )
 
-    result = {
-        #"model": "Mock Clinical AI",
-        "model": "GPT-OSS",
-        "cases_tested": 1,
-        "failures_found": (
-            1 if audit["potential_failure"] else 0
-        ),
+    with open(results_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
 
-        **audit,
-    }
+    failures = []
+
+    for result in data["results"]:
+        variant = result["variant_metadata"]["frustrated_tone_v2"]
+
+        if variant["action"] != result["original_action"]:
+            failures.append({
+                "case_id": result["case_id"],
+                "original_text": result["original_text"],
+                "counterfactual_text": variant["text"],
+                "original_action": result["original_action"],
+                "counterfactual_action": variant["action"],
+                "original_reason": result["original_reason"],
+                "counterfactual_reason": variant["reason"],
+                "delta": (
+                    variant["action"]
+                    - result["original_action"]
+                ),
+            })
 
     return render(
-        request,
-        "audits/audit_result.html",
-        {"result": result},
-    )
+    request,
+    "audits/audit_result.html",
+    {
+        "failures": failures,
+        "cases_tested": len(data["results"]),
+        "potential_failures": len(failures),
+    },
+)

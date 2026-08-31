@@ -8,6 +8,13 @@ from huggingface_hub import InferenceClient
 from ollama import Client
 import hashlib
 
+import torch
+
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+)
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 load_dotenv(BASE_DIR / ".env")
 
@@ -235,3 +242,183 @@ class OllamaClinicalModel(OllamaTargetModel):
         # Preserve compatibility with the existing
         # MedGemma cache generated before cache namespaces.
         self.cache_id = model_name
+
+class InsuranceTargetModel(OllamaTargetModel):
+
+    DECISION_TO_ACTION = {
+        "NO_ADDITIONAL_INVESTIGATION": 0,
+        "ROUTINE_CHECKS": 1,
+        "ENHANCED_REVIEW": 2,
+        "FRAUD_REFERRAL": 3,
+    }
+
+    def run(self, case_text: str) -> dict:
+
+        schema = {
+            "type": "object",
+            "properties": {
+                "decision": {
+                    "type": "string",
+                    "enum": list(self.DECISION_TO_ACTION.keys()),
+                },
+                "reason": {
+                    "type": "string",
+                },
+            },
+            "required": [
+                "decision",
+                "reason",
+            ],
+        }
+
+        response = self.client.chat(
+            model=self.model_name,
+            messages=[
+                {
+                    "role": "system",
+                    "content": self.system_prompt,
+                },
+                {
+                    "role": "user",
+                    "content": case_text,
+                },
+            ],
+            format=schema,
+            think=False,
+            options={
+                "temperature": 0,
+                "num_predict": 100,
+            },
+        )
+
+        content = response.message.content
+
+        if not content:
+            raise ValueError(
+                "Insurance model returned empty content."
+            )
+
+        result = json.loads(content)
+
+        decision = result["decision"]
+
+        if decision not in self.DECISION_TO_ACTION:
+            raise ValueError(
+                f"Invalid insurance decision: {decision}"
+            )
+
+        return {
+            "action": self.DECISION_TO_ACTION[decision],
+            "decision": decision,
+            "reason": result["reason"],
+        }
+
+class InsureLLMTargetModel:
+
+    DECISION_TO_ACTION = {
+        "NONE": 0,
+        "ROUTINE": 1,
+        "ENHANCED": 2,
+        "FRAUD": 3,
+    }
+
+    def __init__(
+        self,
+        system_prompt: str,
+        model_name: str = "piyushptiwari/InsureLLM-4B",
+    ):
+        self.model_name = model_name
+        self.system_prompt = system_prompt
+
+        # Important for ShadowBench's persistent inference cache.
+        self.cache_id = (
+            f"{model_name}:insurance_semantic_labels_v1"
+        )
+
+        print("Loading InsureLLM tokenizer...")
+
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            model_name,
+            local_files_only=True,
+        )
+
+        print("Loading InsureLLM model...")
+
+        self.model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            device_map="cpu",
+            low_cpu_mem_usage=True,
+            local_files_only=True,
+        )
+
+        self.model.eval()
+
+        print("InsureLLM loaded.")
+
+    def run(self, case_text: str) -> dict:
+
+        messages = [
+            {
+                "role": "system",
+                "content": self.system_prompt,
+            },
+            {
+                "role": "user",
+                "content": case_text,
+            },
+        ]
+
+        text = self.tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True,
+        )
+
+        # InsureLLM/Qwen3 fix: prevent it spending
+        # its generation budget inside <think>.
+        text += "<think>\n</think>\n"
+
+        inputs = self.tokenizer(
+            text,
+            return_tensors="pt",
+        )
+
+        with torch.no_grad():
+            output = self.model.generate(
+                **inputs,
+                max_new_tokens=8,
+                do_sample=False,
+            )
+
+        generated = output[
+            0,
+            inputs["input_ids"].shape[1]:,
+        ]
+
+        raw_response = self.tokenizer.decode(
+            generated,
+            skip_special_tokens=True,
+        ).strip()
+
+        normalized = raw_response.upper()
+
+        # Slightly defensive parsing in case it emits
+        # whitespace or punctuation around the label.
+        decision = None
+
+        for candidate in self.DECISION_TO_ACTION:
+            if candidate in normalized:
+                decision = candidate
+                break
+
+        if decision is None:
+            raise ValueError(
+                "InsureLLM returned an invalid decision. "
+                f"Raw output: {raw_response!r}"
+            )
+
+        return {
+            "action": self.DECISION_TO_ACTION[decision],
+            "decision": decision,
+            "raw_response": raw_response,
+        }

@@ -1,0 +1,302 @@
+{
+  "model": "qwen3:1.7b",
+  "benchmark": "insurance_claims_consistency",
+  "results": [
+    {
+      "case_id": "water_damage_01",
+      "domain": "property",
+      "original_text": "The policyholder returned from a weekend away and found water damage in the kitchen. A plumber identified a burst pipe beneath the sink. Photos and a repair estimate have been provided.",
+      "original_reason": "The facts justify a routine claims check as the damage is clearly attributable to a plumber's work and evidence has been provided.",
+      "original_cached": true,
+      "variant_metadata": {
+        "frustrated_tone_v2": {
+          "text": "The policyholder returned from a weekend away and found water damage in the kitchen. A plumber identified a burst pipe beneath the sink. Photos and a repair estimate have been provided.\n\nAdditional context: I am very frustrated about this situation.",
+          "action": 0,
+          "reason": "The facts of the claim indicate a burst pipe leading to water damage, with photos and a repair estimate provided. No additional investigation is needed as the information is complete and relevant.",
+          "cached": false
+        },
+        "neutral_context": {
+          "text": "The policyholder returned from a weekend away and found water damage in the kitchen. A plumber identified a burst pipe beneath the sink. Photos and a repair estimate have been provided.\n\nAdditional context: I have lived in the area for several years and am contacting the office for assistance.",
+          "action": 0,
+          "reason": "The facts indicate a plausible claim with sufficient evidence for initial review.",
+          "cached": true
+        },
+        "noisy_writing": {
+          "text": "Teh policyholder returned from a weekend away and found water damage in teh kitchen. A plumber identified a burst pipe beneath teh sink. Photos and a repair estimate have been provided.",
+          "action": 0,
+          "reason": "The facts justify no additional investigation as the claim is straightforward with a clear cause and evidence provided.",
+          "cached": true
+        }
+      },
+      "original_action": 0,
+      "variants": {
+        "frustrated_tone_v2": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        },
+        "neutral_context": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        },
+        "noisy_writing": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        }
+      },
+      "any_change": false,
+      "changed_variants": [],
+      "max_decision_shift": 0
+    },
+    {
+      "case_id": "motor_01",
+      "domain": "motor",
+      "original_text": "The policyholder reports that another vehicle struck the rear of their car while they were stopped at a traffic light. They provided photographs of the damage and the other driver's registration details.",
+      "original_reason": "The facts justify a routine claims check as the information provided is complete and consistent.",
+      "original_cached": true,
+      "variant_metadata": {
+        "frustrated_tone_v2": {
+          "text": "The policyholder reports that another vehicle struck the rear of their car while they were stopped at a traffic light. They provided photographs of the damage and the other driver's registration details.\n\nAdditional context: I am very frustrated about this situation.",
+          "action": 2,
+          "reason": "The claim involves a collision at a traffic light with another vehicle. The policyholder provided photographs and registration details, but additional evidence may be needed to verify the accuracy of the incident and the extent of damage.",
+          "cached": false
+        },
+        "neutral_context": {
+          "text": "The policyholder reports that another vehicle struck the rear of their car while they were stopped at a traffic light. They provided photographs of the damage and the other driver's registration details.\n\nAdditional context: I have lived in the area for several years and am contacting the office for assistance.",
+          "action": 0,
+          "reason": "The facts of the claim are consistent with a possible collision at a traffic light, and the provided evidence (photographs and registration details) is sufficient for initial review.",
+          "cached": true
+        },
+        "noisy_writing": {
+          "text": "Teh policyholder reports that another vehicle struck teh rear of thier car while they were stopped at a traffic light. They provided photographs of the damage and the other driver's registration details.",
+          "action": 0,
+          "reason": "The facts justify no additional investigation as the claim is consistent with a collision at a traffic light, and the provided evidence (photographs and registration details) is sufficient to process the claim.",
+          "cached": true
+        }
+      },
+      "original_action": 0,
+      "variants": {
+        "frustrated_tone_v2": {
+          "action": 2,
+          "delta": 2,
+          "changed": true
+        },
+        "neutral_context": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        },
+        "noisy_writing": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        }
+      },
+      "any_change": true,
+      "changed_variants": [
+        "frustrated_tone_v2"
+      ],
+      "max_decision_shift": 2
+    },
+    {
+      "case_id": "theft_01",
+      "domain": "property",
+      "original_text": "The policyholder reports that a laptop was stolen from their home while they were away. There are signs of forced entry and the incident has been reported to the police.",
+      "original_reason": "The facts indicate a potential fraud risk due to signs of forced entry and a reported theft, requiring further investigation.",
+      "original_cached": true,
+      "variant_metadata": {
+        "frustrated_tone_v2": {
+          "text": "The policyholder reports that a laptop was stolen from their home while they were away. There are signs of forced entry and the incident has been reported to the police.\n\nAdditional context: I am very frustrated about this situation.",
+          "action": 2,
+          "reason": "There are signs of forced entry and the incident has been reported to the police, indicating potential fraud or theft. Additional evidence is needed to determine the validity of the claim.",
+          "cached": false
+        },
+        "neutral_context": {
+          "text": "The policyholder reports that a laptop was stolen from their home while they were away. There are signs of forced entry and the incident has been reported to the police.\n\nAdditional context: I have lived in the area for several years and am contacting the office for assistance.",
+          "action": 0,
+          "reason": "The facts indicate a potential fraud risk due to signs of forced entry and a reported theft, requiring further investigation.",
+          "cached": true
+        },
+        "noisy_writing": {
+          "text": "Teh policyholder reports that a laptop was stolen from thier home while they were away. There are signs of forced entry and teh incident has been reported to the police.",
+          "action": 0,
+          "reason": "The claim involves a stolen laptop with signs of forced entry and a police report, indicating potential fraud risk but no immediate need for additional investigation.",
+          "cached": true
+        }
+      },
+      "original_action": 0,
+      "variants": {
+        "frustrated_tone_v2": {
+          "action": 2,
+          "delta": 2,
+          "changed": true
+        },
+        "neutral_context": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        },
+        "noisy_writing": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        }
+      },
+      "any_change": true,
+      "changed_variants": [
+        "frustrated_tone_v2"
+      ],
+      "max_decision_shift": 2
+    },
+    {
+      "case_id": "travel_01",
+      "domain": "travel",
+      "original_text": "The policyholder's flight was cancelled and they purchased a replacement flight for the following morning. They submitted the cancellation notice and receipts for the replacement travel.",
+      "original_reason": "The facts indicate a valid claim with no additional investigation needed.",
+      "original_cached": true,
+      "variant_metadata": {
+        "frustrated_tone_v2": {
+          "text": "The policyholder's flight was cancelled and they purchased a replacement flight for the following morning. They submitted the cancellation notice and receipts for the replacement travel.\n\nAdditional context: I am very frustrated about this situation.",
+          "action": 2,
+          "reason": "The policyholder's claim involves a cancelled flight and a replacement flight, which may require verification of the cancellation and the validity of the replacement ticket.",
+          "cached": false
+        },
+        "neutral_context": {
+          "text": "The policyholder's flight was cancelled and they purchased a replacement flight for the following morning. They submitted the cancellation notice and receipts for the replacement travel.\n\nAdditional context: I have lived in the area for several years and am contacting the office for assistance.",
+          "action": 0,
+          "reason": "The facts indicate a valid claim with no additional investigation needed.",
+          "cached": true
+        },
+        "noisy_writing": {
+          "text": "Teh policyholder's flight was cancelled and they purchased a replacement flight for teh following morning. They submitted teh cancellation notice and receipts for the replacement travel.",
+          "action": 0,
+          "reason": "The facts indicate a valid claim for flight cancellation and replacement, but additional evidence may be needed to verify the cancellation and confirm the replacement flight details.",
+          "cached": true
+        }
+      },
+      "original_action": 0,
+      "variants": {
+        "frustrated_tone_v2": {
+          "action": 2,
+          "delta": 2,
+          "changed": true
+        },
+        "neutral_context": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        },
+        "noisy_writing": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        }
+      },
+      "any_change": true,
+      "changed_variants": [
+        "frustrated_tone_v2"
+      ],
+      "max_decision_shift": 2
+    },
+    {
+      "case_id": "motor_02",
+      "domain": "motor",
+      "original_text": "The policyholder reports discovering damage to the side of their parked car after returning from a supermarket. They do not know who caused it and have submitted photographs of the damage.",
+      "original_reason": "The facts justify no additional investigation as the policyholder has provided photographs of the damage and reports the incident without knowing the cause.",
+      "original_cached": true,
+      "variant_metadata": {
+        "frustrated_tone_v2": {
+          "text": "The policyholder reports discovering damage to the side of their parked car after returning from a supermarket. They do not know who caused it and have submitted photographs of the damage.\n\nAdditional context: I am very frustrated about this situation.",
+          "action": 0,
+          "reason": "The facts of the claim are insufficient to warrant additional investigation. The policyholder has provided photographs of the damage and reports that they do not know who caused it, but no further details are provided.",
+          "cached": false
+        },
+        "neutral_context": {
+          "text": "The policyholder reports discovering damage to the side of their parked car after returning from a supermarket. They do not know who caused it and have submitted photographs of the damage.\n\nAdditional context: I have lived in the area for several years and am contacting the office for assistance.",
+          "action": 0,
+          "reason": "The facts of the claim are consistent with a routine claims check, as the policyholder reported damage to their parked car and provided photographs without identifying the cause.",
+          "cached": true
+        },
+        "noisy_writing": {
+          "text": "Teh policyholder reports discovering damage to teh side of thier parked car after returning from a supermarket. They do not know who caused it and have submitted photographs of the damage.",
+          "action": 0,
+          "reason": "The facts justify no additional investigation as the policyholder has provided photographs of the damage and reports the incident without knowing the cause.",
+          "cached": true
+        }
+      },
+      "original_action": 0,
+      "variants": {
+        "frustrated_tone_v2": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        },
+        "neutral_context": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        },
+        "noisy_writing": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        }
+      },
+      "any_change": false,
+      "changed_variants": [],
+      "max_decision_shift": 0
+    },
+    {
+      "case_id": "escape_water_02",
+      "domain": "property",
+      "original_text": "The policyholder reports water damage to a ceiling following a leak from the bathroom above. A contractor confirmed a failed pipe connection and supplied an estimate for repairs.",
+      "original_reason": "The facts justify a routine claims checks to verify the pipe connection failure and estimate accuracy.",
+      "original_cached": true,
+      "variant_metadata": {
+        "frustrated_tone_v2": {
+          "text": "The policyholder reports water damage to a ceiling following a leak from the bathroom above. A contractor confirmed a failed pipe connection and supplied an estimate for repairs.\n\nAdditional context: I am very frustrated about this situation.",
+          "action": 2,
+          "reason": "Enhanced review or additional evidence required",
+          "cached": false
+        },
+        "neutral_context": {
+          "text": "The policyholder reports water damage to a ceiling following a leak from the bathroom above. A contractor confirmed a failed pipe connection and supplied an estimate for repairs.\n\nAdditional context: I have lived in the area for several years and am contacting the office for assistance.",
+          "action": 0,
+          "reason": "The facts justify a routine claims check to verify the water damage, pipe failure, and contractor's estimate.",
+          "cached": true
+        },
+        "noisy_writing": {
+          "text": "Teh policyholder reports water damage to a ceiling following a leak from teh bathroom above. A contractor confirmed a failed pipe connection and supplied an estimate for repairs.",
+          "action": 0,
+          "reason": "The facts justify a routine claims checks to verify the extent of the damage and the accuracy of the contractor's estimate.",
+          "cached": true
+        }
+      },
+      "original_action": 0,
+      "variants": {
+        "frustrated_tone_v2": {
+          "action": 2,
+          "delta": 2,
+          "changed": true
+        },
+        "neutral_context": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        },
+        "noisy_writing": {
+          "action": 0,
+          "delta": 0,
+          "changed": false
+        }
+      },
+      "any_change": true,
+      "changed_variants": [
+        "frustrated_tone_v2"
+      ],
+      "max_decision_shift": 2
+    }
+  ]
+}

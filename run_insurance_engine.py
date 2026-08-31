@@ -6,17 +6,15 @@ from audits.services.audit_engine import (
 )
 from audits.services.attacks import (
     FRUSTRATED_TONE,
-    NEUTRAL_CONTEXT,
-    NOISY_WRITING,
 )
 from audits.services.counterfactual_evaluator import (
     evaluate_standard_counterfactual,
 )
 from audits.services.prompts import (
-    CONSTITUENT_TRIAGE_PROMPT,
+    INSURANCE_CLAIMS_PROMPT,
 )
 from audits.services.target_model import (
-    OllamaTargetModel,
+    InsureLLMTargetModel,
 )
 
 
@@ -25,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent
 CASES_FILE = (
     BASE_DIR
     / "data"
-    / "public_sector_cases.json"
+    / "insurance_cases.json"
 )
 
 RESULTS_DIR = (
@@ -36,14 +34,12 @@ RESULTS_DIR = (
 
 RESULTS_FILE = (
     RESULTS_DIR
-    / "qwen_public_sector_engine_v1.json"
+    / "insurellm_insurance_engine_run_v1.json"
 )
 
 
 ATTACKS = [
     FRUSTRATED_TONE,
-    NEUTRAL_CONTEXT,
-    NOISY_WRITING,
 ]
 
 
@@ -69,11 +65,16 @@ def save_results(results):
     ) as f:
         json.dump(
             {
-                "model": "qwen3:1.7b",
+                "model":
+                    "piyushptiwari/InsureLLM-4B",
                 "benchmark":
-                    "public_sector_consistency",
+                    "insurance_claims_consistency",
                 "engine":
                     "ShadowBenchAudit",
+                "attacks": [
+                    attack.name
+                    for attack in ATTACKS
+                ],
                 "results": results,
             },
             f,
@@ -96,7 +97,9 @@ def summarize(results):
     changes_by_attack = {}
 
     for attack in ATTACKS:
-        changes_by_attack[attack.name] = sum(
+        changes_by_attack[
+            attack.name
+        ] = sum(
             result["evaluation"]["variants"][
                 attack.name
             ]["changed"]
@@ -111,13 +114,6 @@ def summarize(results):
         changes_by_attack.values()
     )
 
-    max_shifts = [
-        result["evaluation"][
-            "max_decision_shift"
-        ]
-        for result in results
-    ]
-
     return {
         "cases_tested": total,
         "affected_cases": affected_cases,
@@ -130,37 +126,34 @@ def summarize(results):
         "total_changed_decisions":
             total_changed_decisions,
         "variant_change_rate":
-            (
-                total_changed_decisions
-                / total_variant_tests
-            ),
-        "mean_maximum_shift":
-            sum(max_shifts) / total,
+            total_changed_decisions
+            / total_variant_tests,
     }
 
 
 def main():
     cases = load_cases()
 
-    model = OllamaTargetModel(
-        model_name="qwen3:1.7b",
-        system_prompt=
-            CONSTITUENT_TRIAGE_PROMPT,
+    # Loads the insurance-specialised model once.
+    model = InsureLLMTargetModel(
+        system_prompt=INSURANCE_CLAIMS_PROMPT,
     )
 
+    # Generic ShadowBench orchestration layer.
     audit = ShadowBenchAudit(
         model=model,
         attacks=ATTACKS,
-        evaluator=
-            evaluate_standard_counterfactual,
+        evaluator=evaluate_standard_counterfactual,
     )
 
     print(
-        f"Loaded {len(cases)} "
-        "public-sector cases."
+        f"Loaded {len(cases)} insurance claims."
     )
     print(
         f"Target model: {model.model_name}"
+    )
+    print(
+        "Engine: ShadowBenchAudit"
     )
     print()
 
@@ -185,7 +178,7 @@ def main():
 
         print(
             f"Found {len(results)} "
-            "existing results."
+            "existing engine results."
         )
         print()
 
@@ -195,7 +188,7 @@ def main():
     }
 
     # -------------------------
-    # Run benchmark
+    # Benchmark
     # -------------------------
 
     for index, case in enumerate(
@@ -222,49 +215,44 @@ def main():
         # Save after every case.
         save_results(results)
 
-        evaluation = result["evaluation"]
-
-        original_action = (
-            result["original"]
-            ["response"]
-            ["action"]
+        original = (
+            result["original"]["response"]
         )
 
         print(
-            f"    Original:          "
-            f"{original_action}"
+            f"    Original: "
+            f"{original['decision']} "
+            f"({original['action']})"
         )
 
         for attack in ATTACKS:
-            action = (
+            variant = (
                 result["variants"]
                 [attack.name]
-                ["response"]
-                ["action"]
             )
 
-            cached = (
-                result["variants"]
-                [attack.name]
-                ["cached"]
-            )
+            response = variant["response"]
 
             cache_marker = (
                 " [cached]"
-                if cached
+                if variant["cached"]
                 else ""
             )
 
             print(
-                f"    {attack.name:18} "
-                f"{action}"
+                f"    {attack.name:20} "
+                f"{response['decision']} "
+                f"({response['action']})"
                 f"{cache_marker}"
             )
+
+        evaluation = result["evaluation"]
 
         if evaluation["any_change"]:
             print(
                 "    >>> DECISION INSTABILITY"
             )
+
             print(
                 "    Changed variants: "
                 + ", ".join(
@@ -289,7 +277,7 @@ def main():
     print("=" * 60)
     print(
         "SHADOWBENCH — "
-        "PUBLIC-SECTOR CONSISTENCY"
+        "INSURANCE CLAIMS CONSISTENCY"
     )
     print("=" * 60)
 
@@ -336,11 +324,6 @@ def main():
     print(
         "Variant-level change rate: "
         f"{summary['variant_change_rate']:.1%}"
-    )
-
-    print(
-        "Mean maximum priority shift: "
-        f"{summary['mean_maximum_shift']:.2f}"
     )
 
     print()

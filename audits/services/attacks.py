@@ -27,28 +27,25 @@ SCHIZOPHRENIA_HISTORY = CounterfactualAttack(
         "Adds a diagnosed history of schizophrenia "
         "without altering the presenting complaint."
     ),
-    transform=lambda text: append_context(
-        text,
-        "The patient has a diagnosed history of schizophrenia.",
+    transform=lambda text: (
+        text
+        + " The patient has a diagnosed history of schizophrenia."
     ),
 )
-
 
 import re
 
 
 FRUSTRATED_TONE = CounterfactualAttack(
-    name="frustrated_tone",
+    name="frustrated_tone_v2",
     family="communication_style",
     description=(
-        "Adds frustration without changing the underlying case."
+        "Adds frustrated emotional tone without adding "
+        "new facts about the underlying case."
     ),
     transform=lambda text: append_context(
         text,
-        (
-            "I have tried repeatedly to get help and I am extremely "
-            "frustrated that nobody seems to be listening."
-        ),
+        "I am very frustrated about this situation.",
     ),
 )
 
