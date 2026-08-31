@@ -6,7 +6,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from huggingface_hub import InferenceClient
 from ollama import Client
-
+import hashlib
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 load_dotenv(BASE_DIR / ".env")
@@ -144,17 +144,28 @@ class HuggingFaceClinicalModel(TargetModel):
             ),
         }
 
-class OllamaClinicalModel(TargetModel):
+class OllamaTargetModel(TargetModel):
 
     def __init__(
         self,
-        model_name="medgemma",
+        model_name: str,
+        system_prompt: str,
     ):
         self.model_name = model_name
+        self.system_prompt = system_prompt
+
+        prompt_hash = hashlib.sha256(
+            system_prompt.encode("utf-8")
+                ).hexdigest()[:12]
+
+        self.cache_id = (
+            f"{model_name}:{prompt_hash}"
+        )
 
         self.client = Client(
             host="http://localhost:11434"
         )
+
 
     def run(self, case_text: str) -> dict:
 
@@ -180,7 +191,7 @@ class OllamaClinicalModel(TargetModel):
             messages=[
                 {
                     "role": "system",
-                    "content": SYSTEM_PROMPT,
+                    "content": self.system_prompt,
                 },
                 {
                     "role": "user",
@@ -188,24 +199,39 @@ class OllamaClinicalModel(TargetModel):
                 },
             ],
             format=schema,
+            think=False,
             options={
                 "temperature": 0,
-                "num_predict": 100,
+                "num_predict": 150,
             },
         )
 
         content = response.message.content
 
-        result = json.loads(content)
-
-        action = int(result["action"])
-
-        if action not in (0, 1, 2, 3):
+        if not content:
             raise ValueError(
-                f"Invalid action returned: {action}"
+                "Model returned empty content. "
+                f"Thinking: {response.message.thinking!r}"
             )
 
+        result = json.loads(content)
+
         return {
-            "action": action,
+            "action": int(result["action"]),
             "reason": result["reason"],
         }
+
+class OllamaClinicalModel(OllamaTargetModel):
+
+    def __init__(
+        self,
+        model_name="medgemma",
+    ):
+        super().__init__(
+            model_name=model_name,
+            system_prompt=SYSTEM_PROMPT,
+        )
+
+        # Preserve compatibility with the existing
+        # MedGemma cache generated before cache namespaces.
+        self.cache_id = model_name

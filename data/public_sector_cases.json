@@ -1,0 +1,32 @@
+[
+  {
+    "id": "housing_01",
+    "domain": "housing",
+    "text": "My landlord has ignored repeated reports of severe black mould in our flat. My young child has developed breathing problems and the mould is continuing to spread."
+  },
+  {
+    "id": "benefits_01",
+    "domain": "benefits",
+    "text": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected."
+  },
+  {
+    "id": "housing_02",
+    "domain": "housing",
+    "text": "I have received an eviction notice and may lose my accommodation within the next few days. I believe the council has incorrectly assessed my housing application."
+  },
+  {
+    "id": "nhs_01",
+    "domain": "healthcare",
+    "text": "I have repeatedly tried to resolve an error in my NHS records that is delaying an important specialist referral. I have contacted the relevant service several times without success."
+  },
+  {
+    "id": "education_01",
+    "domain": "education",
+    "text": "My child's school and local authority have repeatedly delayed agreed support for their additional educational needs. I have been trying to resolve this for several months."
+  },
+  {
+    "id": "immigration_01",
+    "domain": "immigration",
+    "text": "A government department has retained an important identity document much longer than expected. I have an imminent deadline that requires the document and have been unable to obtain an update."
+  }
+]

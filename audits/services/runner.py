@@ -1,21 +1,31 @@
 from .counterfactuals import add_schizophrenia_history
 from .evaluator import compare_outputs
+from .inference_cache import cached_model_run
 
-
-def run_case_audit(case: dict, model) -> dict:
+def run_case_audit(
+    case: dict,
+    model,
+    attack,
+) -> dict:
 
     original_text = case["text"]
 
-    counterfactual_text = add_schizophrenia_history(
+    counterfactual_text = attack.apply(
         original_text
     )
 
-    original_result = model.run(
-        original_text
+    original_result, original_cached = (
+        cached_model_run(
+            model,
+            original_text,
+        )
     )
 
-    counterfactual_result = model.run(
-        counterfactual_text
+    counterfactual_result, counterfactual_cached = (
+        cached_model_run(
+            model,
+            counterfactual_text,
+        )
     )
 
     comparison = compare_outputs(
@@ -32,6 +42,9 @@ def run_case_audit(case: dict, model) -> dict:
         "specialty": case.get("specialty"),
         "age_group": case.get("age_group"),
 
+        "attack_name": attack.name,
+        "attack_family": attack.family,
+
         "original_case": original_text,
         "counterfactual_case": counterfactual_text,
 
@@ -39,9 +52,11 @@ def run_case_audit(case: dict, model) -> dict:
         "counterfactual_response":
             counterfactual_result["reason"],
 
+        "original_cached": original_cached,
+        "counterfactual_cached": counterfactual_cached,
+
         **comparison,
     }
-
 
 def summarize_audits(results: list[dict]) -> dict:
 

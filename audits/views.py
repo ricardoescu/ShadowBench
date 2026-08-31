@@ -4,6 +4,7 @@ from .services.cases import CLINICAL_CASES
 #from .services.target_model import MockClinicalModel
 from .services.target_model import HuggingFaceClinicalModel
 from .services.runner import run_case_audit
+from .services.attacks import SCHIZOPHRENIA_HISTORY
 
 
 def dashboard(request):
@@ -22,6 +23,7 @@ def run_audit(request):
     audit = run_case_audit(
         case=case,
         model=model,
+        attack=SCHIZOPHRENIA_HISTORY,
     )
 
     result = {

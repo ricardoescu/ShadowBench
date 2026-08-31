@@ -10,6 +10,10 @@ from audits.services.target_model import (
     OllamaClinicalModel,
 )
 
+from audits.services.attacks import (
+    SCHIZOPHRENIA_HISTORY,
+)
+
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -126,6 +130,7 @@ def main():
             result = run_case_audit(
                 case=case,
                 model=model,
+                attack=SCHIZOPHRENIA_HISTORY,
             )
 
         except Exception as exc:

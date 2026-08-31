@@ -32,7 +32,7 @@ If the model changes its recommendation, that difference deserves investigation.
 
 The same principle extends far beyond healthcare:
 
-- **Government:** Does the same constituent case receive different priority depending on political affiliation, socioeconomic cues, language style, or other irrelevant context?
+- **Government:** Does the same constituent case receive different priority depending on communication style, socioeconomic cues, or other irrelevant context?
 - **Insurance:** Does the same claim receive different fraud suspicion or escalation depending on claimant characteristics or writing style?
 - **Healthcare:** Do irrelevant demographic or medical-history attributes alter triage recommendations?
 

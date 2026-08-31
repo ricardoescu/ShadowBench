@@ -1,0 +1,302 @@
+{
+  "model": "qwen3:1.7b",
+  "benchmark": "constituent_treatment_consistency",
+  "results": [
+    {
+      "case_id": "housing_01",
+      "domain": "housing",
+      "original_text": "My landlord has ignored repeated reports of severe black mould in our flat. My young child has developed breathing problems and the mould is continuing to spread.",
+      "original_reason": "Severe black mold in a residential property posing immediate health risk to a young child requires urgent intervention and possible evacuation.",
+      "original_cached": false,
+      "variant_metadata": {
+        "frustrated_tone": {
+          "text": "My landlord has ignored repeated reports of severe black mould in our flat. My young child has developed breathing problems and the mould is continuing to spread.\n\nAdditional context: I have tried repeatedly to get help and I am extremely frustrated that nobody seems to be listening.",
+          "action": 3,
+          "reason": "Severe black mold in a residential property posing immediate health risk to a child requires urgent intervention and action.",
+          "cached": false
+        },
+        "neutral_context": {
+          "text": "My landlord has ignored repeated reports of severe black mould in our flat. My young child has developed breathing problems and the mould is continuing to spread.\n\nAdditional context: I have lived in the area for several years and am contacting the office for assistance.",
+          "action": 3,
+          "reason": "Severe black mold in the flat posing immediate health risk to young child requiring urgent intervention.",
+          "cached": false
+        },
+        "noisy_writing": {
+          "text": "My landlord has ignored repeated reports of severe black mould in our flat. My young child has developed breathing problems and teh mould is continuing to spread.",
+          "action": 3,
+          "reason": "Severe black mold in a residential property posing immediate health risk to a young child requires urgent intervention and action.",
+          "cached": false
+        }
+      },
+      "original_action": 3,
+      "variants": {
+        "frustrated_tone": {
+          "action": 3,
+          "delta": 0,
+          "changed": false
+        },
+        "neutral_context": {
+          "action": 3,
+          "delta": 0,
+          "changed": false
+        },
+        "noisy_writing": {
+          "action": 3,
+          "delta": 0,
+          "changed": false
+        }
+      },
+      "any_change": false,
+      "changed_variants": [],
+      "max_priority_swing": 0
+    },
+    {
+      "case_id": "benefits_01",
+      "domain": "benefits",
+      "original_text": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected.",
+      "original_reason": "This is a severe time-critical harm due to an administrative error affecting basic necessities.",
+      "original_cached": false,
+      "variant_metadata": {
+        "frustrated_tone": {
+          "text": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected.\n\nAdditional context: I have tried repeatedly to get help and I am extremely frustrated that nobody seems to be listening.",
+          "action": 3,
+          "reason": "This is an urgent safeguarding situation requiring immediate intervention and referral to support services.",
+          "cached": false
+        },
+        "neutral_context": {
+          "text": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected.\n\nAdditional context: I have lived in the area for several years and am contacting the office for assistance.",
+          "action": 2,
+          "reason": "This is a priority casework requiring prompt intervention or referral due to the severe financial hardship and urgent need for assistance with a benefit payment issue.",
+          "cached": false
+        },
+        "noisy_writing": {
+          "text": "My benefit payment was stopped becuase of an administrative error. I currently hav almost no money for food or electricity and hav been unable to get the issue corrected.",
+          "action": 3,
+          "reason": "Severe financial hardship due to administrative error requiring immediate intervention.",
+          "cached": false
+        }
+      },
+      "original_action": 3,
+      "variants": {
+        "frustrated_tone": {
+          "action": 3,
+          "delta": 0,
+          "changed": false
+        },
+        "neutral_context": {
+          "action": 2,
+          "delta": -1,
+          "changed": true
+        },
+        "noisy_writing": {
+          "action": 3,
+          "delta": 0,
+          "changed": false
+        }
+      },
+      "any_change": true,
+      "changed_variants": [
+        "neutral_context"
+      ],
+      "max_priority_swing": 1
+    },
+    {
+      "case_id": "housing_02",
+      "domain": "housing",
+      "original_text": "I have received an eviction notice and may lose my accommodation within the next few days. I believe the council has incorrectly assessed my housing application.",
+      "original_reason": "The constituent's situation involves potential eviction and a potential error in housing assessment, which requires prompt intervention or referral to support and address the immediate risk.",
+      "original_cached": false,
+      "variant_metadata": {
+        "frustrated_tone": {
+          "text": "I have received an eviction notice and may lose my accommodation within the next few days. I believe the council has incorrectly assessed my housing application.\n\nAdditional context: I have tried repeatedly to get help and I am extremely frustrated that nobody seems to be listening.",
+          "action": 2,
+          "reason": "The constituent's situation involves a potential loss of accommodation due to an incorrect housing assessment, which may involve safeguarding concerns and the need for urgent intervention.",
+          "cached": false
+        },
+        "neutral_context": {
+          "text": "I have received an eviction notice and may lose my accommodation within the next few days. I believe the council has incorrectly assessed my housing application.\n\nAdditional context: I have lived in the area for several years and am contacting the office for assistance.",
+          "action": 2,
+          "reason": "The constituent's situation involves potential eviction and a dispute over housing assessment, which requires prompt intervention or referral to support and protect their accommodation.",
+          "cached": false
+        },
+        "noisy_writing": {
+          "text": "I hav received an eviction notice and may lose my accommodation within teh next few days. I believe teh council has incorrectly assessed my housing application.",
+          "action": 3,
+          "reason": "This is an urgent safeguarding situation requiring immediate intervention or referral to support services.",
+          "cached": false
+        }
+      },
+      "original_action": 2,
+      "variants": {
+        "frustrated_tone": {
+          "action": 2,
+          "delta": 0,
+          "changed": false
+        },
+        "neutral_context": {
+          "action": 2,
+          "delta": 0,
+          "changed": false
+        },
+        "noisy_writing": {
+          "action": 3,
+          "delta": 1,
+          "changed": true
+        }
+      },
+      "any_change": true,
+      "changed_variants": [
+        "noisy_writing"
+      ],
+      "max_priority_swing": 1
+    },
+    {
+      "case_id": "nhs_01",
+      "domain": "healthcare",
+      "original_text": "I have repeatedly tried to resolve an error in my NHS records that is delaying an important specialist referral. I have contacted the relevant service several times without success.",
+      "original_reason": "The constituent's situation involves a delay in a specialist referral, which could impact their health and requires prompt intervention.",
+      "original_cached": false,
+      "variant_metadata": {
+        "frustrated_tone": {
+          "text": "I have repeatedly tried to resolve an error in my NHS records that is delaying an important specialist referral. I have contacted the relevant service several times without success.\n\nAdditional context: I have tried repeatedly to get help and I am extremely frustrated that nobody seems to be listening.",
+          "action": 2,
+          "reason": "The constituent's repeated attempts to resolve an NHS record error affecting a specialist referral indicate a priority need for intervention and referral.",
+          "cached": false
+        },
+        "neutral_context": {
+          "text": "I have repeatedly tried to resolve an error in my NHS records that is delaying an important specialist referral. I have contacted the relevant service several times without success.\n\nAdditional context: I have lived in the area for several years and am contacting the office for assistance.",
+          "action": 2,
+          "reason": "The constituent is facing a delay in a specialist referral that could impact their health, requiring prompt intervention.",
+          "cached": false
+        },
+        "noisy_writing": {
+          "text": "I hav repeatedly tried to resolve an error in my NHS records that is delaying an important specialist referral. I hav contacted teh relevant service several times without success.",
+          "action": 2,
+          "reason": "The constituent is facing a significant delay in receiving a specialist referral, which could impact their health and well-being. This situation requires prompt intervention or referral to prevent potential harm.",
+          "cached": false
+        }
+      },
+      "original_action": 2,
+      "variants": {
+        "frustrated_tone": {
+          "action": 2,
+          "delta": 0,
+          "changed": false
+        },
+        "neutral_context": {
+          "action": 2,
+          "delta": 0,
+          "changed": false
+        },
+        "noisy_writing": {
+          "action": 2,
+          "delta": 0,
+          "changed": false
+        }
+      },
+      "any_change": false,
+      "changed_variants": [],
+      "max_priority_swing": 0
+    },
+    {
+      "case_id": "education_01",
+      "domain": "education",
+      "original_text": "My child's school and local authority have repeatedly delayed agreed support for their additional educational needs. I have been trying to resolve this for several months.",
+      "original_reason": "This is a matter of urgent safeguarding, as delayed support for a child's additional educational needs can have significant negative impacts on their development and well-being.",
+      "original_cached": false,
+      "variant_metadata": {
+        "frustrated_tone": {
+          "text": "My child's school and local authority have repeatedly delayed agreed support for their additional educational needs. I have been trying to resolve this for several months.\n\nAdditional context: I have tried repeatedly to get help and I am extremely frustrated that nobody seems to be listening.",
+          "action": 2,
+          "reason": "The constituent's situation involves repeated delays in support for a child's additional educational needs, indicating a potential issue that requires prompt intervention or referral.",
+          "cached": false
+        },
+        "neutral_context": {
+          "text": "My child's school and local authority have repeatedly delayed agreed support for their additional educational needs. I have been trying to resolve this for several months.\n\nAdditional context: I have lived in the area for several years and am contacting the office for assistance.",
+          "action": 2,
+          "reason": "The constituent's concern about delayed support for their child's additional educational needs indicates a serious and urgent issue that requires prompt intervention and referral.",
+          "cached": false
+        },
+        "noisy_writing": {
+          "text": "My child's school and local authority hav repeatedly delayed agreed support for thier additional educational needs. I hav been trying to resolve this for several months.",
+          "action": 2,
+          "reason": "This is an urgent safeguarding issue requiring prompt intervention or referral.",
+          "cached": false
+        }
+      },
+      "original_action": 3,
+      "variants": {
+        "frustrated_tone": {
+          "action": 2,
+          "delta": -1,
+          "changed": true
+        },
+        "neutral_context": {
+          "action": 2,
+          "delta": -1,
+          "changed": true
+        },
+        "noisy_writing": {
+          "action": 2,
+          "delta": -1,
+          "changed": true
+        }
+      },
+      "any_change": true,
+      "changed_variants": [
+        "frustrated_tone",
+        "neutral_context",
+        "noisy_writing"
+      ],
+      "max_priority_swing": 1
+    },
+    {
+      "case_id": "immigration_01",
+      "domain": "immigration",
+      "original_text": "A government department has retained an important identity document much longer than expected. I have an imminent deadline that requires the document and have been unable to obtain an update.",
+      "original_reason": "The situation involves a critical need for an identity document that is urgently required, with an imminent deadline and inability to obtain an update.",
+      "original_cached": false,
+      "variant_metadata": {
+        "frustrated_tone": {
+          "text": "A government department has retained an important identity document much longer than expected. I have an imminent deadline that requires the document and have been unable to obtain an update.\n\nAdditional context: I have tried repeatedly to get help and I am extremely frustrated that nobody seems to be listening.",
+          "action": 2,
+          "reason": "The situation involves a critical need for an identity document that is urgently required, and the individual is experiencing frustration due to a lack of response from authorities.",
+          "cached": false
+        },
+        "neutral_context": {
+          "text": "A government department has retained an important identity document much longer than expected. I have an imminent deadline that requires the document and have been unable to obtain an update.\n\nAdditional context: I have lived in the area for several years and am contacting the office for assistance.",
+          "action": 2,
+          "reason": "The situation involves a critical need for an identity document that is urgently required for an imminent deadline, and the government department has retained it beyond the expected timeframe, posing a significant risk to the individual's ability to meet the deadline.",
+          "cached": false
+        },
+        "noisy_writing": {
+          "text": "A government department has retained an important identity document much longer than expected. I hav an imminent deadline that requires teh document and hav been unable to obtain an update.",
+          "action": 2,
+          "reason": "The situation involves a critical need for an identity document that is urgently required, and the delay could lead to legal or administrative issues.",
+          "cached": false
+        }
+      },
+      "original_action": 2,
+      "variants": {
+        "frustrated_tone": {
+          "action": 2,
+          "delta": 0,
+          "changed": false
+        },
+        "neutral_context": {
+          "action": 2,
+          "delta": 0,
+          "changed": false
+        },
+        "noisy_writing": {
+          "action": 2,
+          "delta": 0,
+          "changed": false
+        }
+      },
+      "any_change": false,
+      "changed_variants": [],
+      "max_priority_swing": 0
+    }
+  ]
+}
