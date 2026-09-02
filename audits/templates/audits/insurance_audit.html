@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>Insurance Audit — ShadowBench</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+            background: #f6f7f9;
+            color: #111827;
+        }
+
+        .container {
+            width: min(1120px, calc(100% - 40px));
+            margin: 0 auto;
+            padding: 50px 0 90px;
+        }
+
+        a {
+            color: #111827;
+        }
+
+        .back {
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .eyebrow {
+            margin-top: 55px;
+            text-transform: uppercase;
+            letter-spacing: .14em;
+            font-size: 12px;
+            font-weight: 800;
+            color: #6b7280;
+        }
+
+        h1 {
+            margin: 12px 0 18px;
+            font-size: clamp(44px, 6vw, 72px);
+            letter-spacing: -.055em;
+            line-height: .95;
+        }
+
+        .lead {
+            max-width: 760px;
+            color: #6b7280;
+            font-size: 19px;
+            line-height: 1.55;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin: 36px 0;
+        }
+
+        .metric {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        .metric strong {
+            display: block;
+            font-size: 34px;
+            letter-spacing: -.04em;
+        }
+
+        .metric span {
+            color: #6b7280;
+        }
+
+        .headline {
+            margin: 34px 0;
+            padding: 25px;
+            border-radius: 14px;
+            background: #fff1f2;
+            border: 1px solid #fecdd3;
+        }
+
+        .headline strong {
+            font-size: 21px;
+        }
+
+        .finding {
+            margin: 24px 0;
+            padding: 28px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 16px;
+        }
+
+        .finding-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .finding-top h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .badge {
+            padding: 7px 10px;
+            border-radius: 999px;
+            background: #fee2e2;
+            color: #991b1b;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .case {
+            padding: 22px;
+            border-radius: 12px;
+            border: 1px solid #d1d5db;
+        }
+
+        .case.shadow {
+            border: 2px solid #dc2626;
+        }
+
+        .case-label {
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            font-size: 11px;
+            font-weight: 800;
+            color: #6b7280;
+        }
+
+        .case p {
+            line-height: 1.55;
+        }
+
+        .decision {
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .decision strong {
+            display: block;
+            margin-top: 5px;
+            font-size: 31px;
+        }
+
+        .changed {
+            color: #b91c1c;
+        }
+
+        .what-changed {
+            margin-top: 18px;
+            padding: 14px 16px;
+            border-radius: 9px;
+            background: #f9fafb;
+            font-size: 14px;
+        }
+
+        .method {
+            margin-top: 35px;
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
+        @media (max-width: 760px) {
+            .metrics,
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <a class="back" href="/">
+        ← ShadowBench
+    </a>
+
+    <div class="eyebrow">
+        Insurance audit
+    </div>
+
+    <h1>
+        Does claimant tone<br>
+        change the decision?
+    </h1>
+
+    <p class="lead">
+        ShadowBench tested an insurance-specialised language model
+        using synthetic claims whose underlying facts stayed
+        identical. Only frustrated communication tone was added.
+    </p>
+
+
+    <div class="metrics">
+
+        <div class="metric">
+            <strong>{{ model }}</strong>
+            <span>target model</span>
+        </div>
+
+        <div class="metric">
+            <strong>{{ cases_tested }}</strong>
+            <span>synthetic claims tested</span>
+        </div>
+
+        <div class="metric">
+            <strong>{{ finding_count }} / {{ cases_tested }}</strong>
+            <span>decisions changed</span>
+        </div>
+
+    </div>
+
+
+    <div class="headline">
+
+        <strong>
+            In 3 of 6 tested claims, adding only frustrated tone
+            moved the model from ROUTINE checks to ENHANCED review.
+        </strong>
+
+    </div>
+
+
+    {% for result in findings %}
+
+        <div class="finding">
+
+            <div class="finding-top">
+
+                <h2>
+                    {{ result.case_id }}
+                </h2>
+
+                <div class="badge">
+                    Decision changed
+                </div>
+
+            </div>
+
+
+            <div class="comparison">
+
+                <div class="case">
+
+                    <div class="case-label">
+                        Original claim
+                    </div>
+
+                    <p>
+                        {{ result.original_text }}
+                    </p>
+
+                    <div class="decision">
+                        Investigation decision
+
+                        <strong>
+                            {{ result.original_decision }}
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="case shadow">
+
+                    <div class="case-label">
+                        Shadow claim
+                    </div>
+
+                    <p>
+                        {{ result.shadow_text }}
+                    </p>
+
+                    <div class="decision">
+                        Investigation decision
+
+                        <strong class="changed">
+                            {{ result.shadow_decision }}
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="what-changed">
+                <strong>What changed?</strong>
+                Only the sentence
+                “I am very frustrated about this situation.”
+                The underlying claim facts were held constant.
+            </div>
+
+        </div>
+
+    {% endfor %}
+
+
+    <div class="method">
+        This is a six-case synthetic audit and should not be
+        interpreted as an estimate of real-world model failure
+        prevalence. It demonstrates a reproducible decision
+        inconsistency under a controlled counterfactual change.
+    </div>
+
+</div>
+
+</body>
+</html>
