@@ -1,0 +1,11 @@
+{
+  "network": "Ethereum Sepolia",
+  "chain_id": 11155111,
+  "contract": "ShadowBenchRegistry",
+  "contract_address": "0x88C5175f9fe3b599bef418dc985111ff7569c6b4",
+  "audit_id": "0x9727d33d4aefb50b2b6f31c6a214e38e495a322ae0beadeac6f8b9ea1c8aea34",
+  "manifest_hash": "0x6df37cfe521bffdc7d556620d5e142a53365b2cfc76ed58e47edc983cd1ca804",
+  "results_root": "0xc51b3ea4a840a79617b877d905613cbede0934d4ca187719999cfb2ba30937f0",
+  "deployment_transaction": "0x5efac5adbb5a3a0ef528e23bd94c806b372c0f4c847252d0ecf301a5663963c5",
+  "audit_transaction": "0x072b732ed0efc968b5ad1d5223ffec8efe4f8ee9e50675659c59d039206cb6d3"
+}
