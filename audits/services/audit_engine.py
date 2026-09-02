@@ -113,3 +113,87 @@ class ShadowBenchAudit:
 
             "evaluation": evaluation,
         }
+
+    def run_single_attack(
+        self,
+        case: dict,
+        attack: CounterfactualAttack,
+    ) -> dict:
+        """
+        Run one selected adversarial attack against one case.
+
+        Used by adaptive audit controllers.
+        """
+
+        case_id = case["id"]
+        original_text = case["text"]
+
+        # Original inference
+        original_response, original_cached = (
+            cached_model_run(
+                self.model,
+                original_text,
+            )
+        )
+
+        # Selected counterfactual
+        variant_text = attack.apply(
+            original_text
+        )
+
+        response, cached = cached_model_run(
+            self.model,
+            variant_text,
+        )
+
+        variant_responses = {
+            attack.name: response
+        }
+
+        variants = {
+            attack.name: {
+                "family": attack.family,
+                "description":
+                    attack.description,
+                "text": variant_text,
+                "response": response,
+                "cached": cached,
+            }
+        }
+
+        # Same evaluator as normal ShadowBench.
+        evaluation = self.evaluator(
+            original_response,
+            variant_responses,
+            case,
+        )
+
+        metadata = {
+            key: value
+            for key, value in case.items()
+            if key not in {"id", "text"}
+        }
+
+        return {
+            "case_id": case_id,
+            "metadata": metadata,
+
+            "original": {
+                "text": original_text,
+                "response":
+                    original_response,
+                "cached":
+                    original_cached,
+            },
+
+            "variants": variants,
+
+            "evaluation": evaluation,
+
+            "adaptive": {
+                "selected_attack":
+                    attack.name,
+                "attack_family":
+                    attack.family,
+            },
+        }

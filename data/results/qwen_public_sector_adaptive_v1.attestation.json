@@ -1,0 +1,16 @@
+{
+  "schema": "shadowbench-attestation-v1",
+  "hash_algorithm": "SHA-256",
+  "audit_id": "9727d33d4aefb50b2b6f31c6a214e38e495a322ae0beadeac6f8b9ea1c8aea34",
+  "manifest": {
+    "model": "qwen3:1.7b",
+    "benchmark": "public_sector_consistency",
+    "mode": "adaptive_thompson_sampling",
+    "budget": 10,
+    "controller": "Beta-Bernoulli Thompson sampling"
+  },
+  "manifest_hash": "6df37cfe521bffdc7d556620d5e142a53365b2cfc76ed58e47edc983cd1ca804",
+  "results_root": "c51b3ea4a840a79617b877d905613cbede0934d4ca187719999cfb2ba30937f0",
+  "source_file_hash": "7909e923ecc26f057e5612f54f3e5df33331028cfd12d79281139637d5e40d6e",
+  "result_count": 10
+}
