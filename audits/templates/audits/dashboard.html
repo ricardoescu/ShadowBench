@@ -549,9 +549,17 @@
                     Priority {{ search.baseline.action }}
                 </div>
 
-                <div style="margin-top:10px; color:#d1d5db;">
-                    Almost no money for food or electricity
-                    following an administrative error.
+                <div
+                    style="
+                        margin-top:14px;
+                        color:#d1d5db;
+                        line-height:1.55;
+                        max-width:540px;
+                        margin-left:auto;
+                        margin-right:auto;
+                    "
+                >
+                    {{ original_case }}
                 </div>
             </div>
 
@@ -592,9 +600,19 @@
                                     stable-text
                                 {% endif %}
                             ">
-                                {{ node.original_action }}
-                                →
-                                {{ node.new_action }}
+                                <div class="decision-shift">
+                                    <div>
+                                        {{ node.original_label }}
+                                    </div>
+
+                                    <div style="margin:6px 0;">
+                                        ↓
+                                    </div>
+
+                                    <div>
+                                        {{ node.new_label }}
+                                    </div>
+                                </div>
 
                                 {% if node.finding %}
                                     ⚠
@@ -644,15 +662,27 @@
                                     stable-text
                                 {% endif %}
                             ">
-                                {{ node.original_action }}
-                                →
-                                {{ node.new_action }}
 
-                                {% if node.finding %}
-                                    ⚠
-                                {% else %}
-                                    ✓
-                                {% endif %}
+                                <div>
+                                    {{ node.original_label }}
+                                </div>
+
+                                <div style="margin: 6px 0;">
+                                    ↓
+                                </div>
+
+                                <div>
+                                    {{ node.new_label }}
+                                </div>
+
+                                <div style="margin-top: 6px;">
+                                    {% if node.finding %}
+                                        ⚠ Decision changed
+                                    {% else %}
+                                        ✓ Decision stable
+                                    {% endif %}
+                                </div>
+
                             </div>
 
                         </div>
@@ -696,15 +726,27 @@
                                     stable-text
                                 {% endif %}
                             ">
-                                {{ node.original_action }}
-                                →
-                                {{ node.new_action }}
 
-                                {% if node.finding %}
-                                    ⚠
-                                {% else %}
-                                    ✓
-                                {% endif %}
+                                <div>
+                                    {{ node.original_label }}
+                                </div>
+
+                                <div style="margin: 6px 0;">
+                                    ↓
+                                </div>
+
+                                <div>
+                                    {{ node.new_label }}
+                                </div>
+
+                                <div style="margin-top: 6px;">
+                                    {% if node.finding %}
+                                        ⚠ Decision changed
+                                    {% else %}
+                                        ✓ Decision stable
+                                    {% endif %}
+                                </div>
+
                             </div>
 
                         </div>

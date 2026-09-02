@@ -14,6 +14,12 @@ def dashboard(request):
         / "results"
         / "qwen_public_sector_adversarial_tree_v1.json"
     )
+    action_labels = {
+        0: "Routine",
+        1: "Standard casework",
+        2: "Priority casework",
+        3: "Urgent / time-critical",
+    }
 
     with open(
         tree_path,
@@ -27,6 +33,11 @@ def dashboard(request):
         for node in tree["nodes"]
         if node["id"] != "root"
     ]
+    root_node = next(
+        node
+        for node in tree["nodes"]
+        if node["id"] == "root"
+    )
 
     communication_nodes = [
         node
@@ -46,6 +57,15 @@ def dashboard(request):
         if node.get("family") == "communication_quality"
     ]
 
+    for node in nodes:
+        node["original_label"] = action_labels[
+            node["original_action"]
+        ]
+
+        node["new_label"] = action_labels[
+            node["new_action"]
+        ]
+
     deployment_path = (
         Path(settings.BASE_DIR)
         / "deployments"
@@ -64,11 +84,14 @@ def dashboard(request):
         + deployment["audit_transaction"]
     )
 
+
+
     return render(
         request,
         "audits/dashboard.html",
         {
             "search": tree,
+            "original_case": root_node["text"],
             "communication_nodes": communication_nodes,
             "context_nodes": context_nodes,
             "writing_nodes": writing_nodes,
