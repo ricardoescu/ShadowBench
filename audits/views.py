@@ -5,8 +5,76 @@ from .services.cases import CLINICAL_CASES
 from .services.target_model import HuggingFaceClinicalModel
 from .services.runner import run_case_audit
 from .services.attacks import SCHIZOPHRENIA_HISTORY
+from difflib import SequenceMatcher
 
+def extract_text_change(
+    original_text: str,
+    candidate_text: str,
+) -> dict:
+    """
+    Extract only the literal difference between the
+    original case and a generated shadow case.
+    """
 
+    original_text = original_text.strip()
+    candidate_text = candidate_text.strip()
+
+    # Most ShadowBench probes append context while leaving
+    # the original case untouched.
+    if candidate_text.startswith(original_text):
+
+        added_text = candidate_text[
+            len(original_text):
+        ].strip()
+
+        # Hide the mechanical wrapper used internally so the
+        # presentation shows the actual semantic addition.
+        prefix = "Additional context:"
+
+        if added_text.startswith(prefix):
+            added_text = added_text[
+                len(prefix):
+            ].strip()
+
+        return {
+            "kind": "addition",
+            "added": added_text,
+            "edits": [],
+        }
+
+    # For transformations inside the text, such as spelling
+    # noise, show the actual changed words.
+    original_words = original_text.split()
+    candidate_words = candidate_text.split()
+
+    matcher = SequenceMatcher(
+        None,
+        original_words,
+        candidate_words,
+    )
+
+    edits = []
+
+    for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+
+        if tag == "equal":
+            continue
+
+        edits.append({
+            "kind": tag,
+            "before": " ".join(
+                original_words[i1:i2]
+            ),
+            "after": " ".join(
+                candidate_words[j1:j2]
+            ),
+        })
+
+    return {
+        "kind": "edit",
+        "added": "",
+        "edits": edits,
+    }
 def dashboard(request):
     tree_path = (
         Path(settings.BASE_DIR)
@@ -39,10 +107,33 @@ def dashboard(request):
         if node["id"] == "root"
     )
 
+    queries_executed = len(nodes)
+    query_budget = tree["target_query_budget"]
+
+    controller_summary = tree[
+        "controller_summary"
+    ]
+
+    context_stats = controller_summary[
+        "context_control"
+    ]
+
+    style_stats = controller_summary[
+        "communication_style"
+    ]
+
+    writing_stats = controller_summary[
+        "communication_quality"
+    ]
+
     communication_nodes = [
         node
         for node in nodes
-        if node.get("family") == "communication_style"
+        if (
+            node.get("family")
+            == "communication_style"
+            and node.get("type") == "seed"
+        )
     ]
 
     context_nodes = [
@@ -65,6 +156,11 @@ def dashboard(request):
         node["new_label"] = action_labels[
             node["new_action"]
         ]
+
+        node["text_change"] = extract_text_change(
+            original_text=root_node["text"],
+            candidate_text=node["candidate_text"],
+        )
 
     deployment_path = (
         Path(settings.BASE_DIR)
@@ -92,11 +188,34 @@ def dashboard(request):
         {
             "search": tree,
             "original_case": root_node["text"],
-            "communication_nodes": communication_nodes,
-            "context_nodes": context_nodes,
-            "writing_nodes": writing_nodes,
+
+            "queries_executed": queries_executed,
+            "query_budget": query_budget,
+
+            "context_tests":
+                context_stats["tests"],
+            "context_findings":
+                context_stats["findings"],
+
+            "style_tests":
+                style_stats["tests"],
+            "style_findings":
+                style_stats["findings"],
+
+            "writing_tests":
+                writing_stats["tests"],
+            "writing_findings":
+                writing_stats["findings"],
+
+            "communication_nodes":
+                communication_nodes,
+            "context_nodes":
+                context_nodes,
+            "writing_nodes":
+                writing_nodes,
+
             "deployment": deployment,
-        },
+        }
     )
 def insurance_audit(request):
 

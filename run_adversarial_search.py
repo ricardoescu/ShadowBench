@@ -5,7 +5,7 @@ from pathlib import Path
 
 from audits.services.attacks import (
     CounterfactualAttack,
-    FRUSTRATED_TONE,
+    #FRUSTRATED_TONE,
     NOISY_WRITING,
     append_context,
 )
@@ -55,9 +55,45 @@ SAFE_NEUTRAL_CONTEXT = CounterfactualAttack(
         "My favourite colour is blue.",
     ),
 )
+def frustrated_rewrite(
+    text: str,
+) -> str:
+
+    old = (
+        "and have been unable to get "
+        "the issue corrected."
+    )
+
+    new = (
+        "and I am frustrated that I have "
+        "been unable to get the issue corrected."
+    )
+
+    if old not in text:
+        raise ValueError(
+            "Expected sentence not found "
+            "for frustration seed."
+        )
+
+    return text.replace(
+        old,
+        new,
+        1,
+    )
+
+
+FRUSTRATED_REWRITE = CounterfactualAttack(
+    name="frustrated_rewrite",
+    family="communication_style",
+    description=(
+        "Expresses frustration while preserving "
+        "the underlying case facts."
+    ),
+    transform=frustrated_rewrite,
+)
 
 SEED_ATTACKS = [
-    FRUSTRATED_TONE,
+    FRUSTRATED_REWRITE,
     SAFE_NEUTRAL_CONTEXT,
     NOISY_WRITING,
 ]
@@ -94,7 +130,27 @@ class FamilyThompsonController:
             for family in families
         }
 
-    def select_family(self) -> str:
+    def select_family(
+        self,
+        allowed_families=None,
+    ) -> str:
+
+        if allowed_families is None:
+            allowed_families = set(
+                self.states.keys()
+            )
+
+        candidates = {
+            name: state
+            for name, state
+            in self.states.items()
+            if name in allowed_families
+        }
+
+        if not candidates:
+            raise ValueError(
+                "No active attack families remain."
+            )
 
         samples = {
             name:
@@ -103,13 +159,14 @@ class FamilyThompsonController:
                     state.beta,
                 )
             for name, state
-            in self.states.items()
+            in candidates.items()
         }
 
         return max(
             samples,
             key=samples.get,
         )
+
 
     def update(
         self,
@@ -416,21 +473,28 @@ def main():
         family: 0
         for family in families
     }
+    active_families = set(families)
     while (
         query_number
         < TARGET_QUERY_BUDGET
     ):
 
-        family = (
-            controller.select_family()
-        )
+        if not active_families:
+            print(
+                "No generatable attack families remain."
+            )
+            break
 
+        family = controller.select_family(
+            allowed_families=active_families,
+        )
         try:
             generated = adversary.generate(
                 original_text=original_text,
                 family=family,
                 history=history,
             )
+            generation_failures[family] = 0
 
         except RuntimeError as exc:
 
@@ -447,10 +511,16 @@ def main():
 
             print()
 
-            if generation_failures[family] >= 3:
-                controller.states[
+            if generation_failures[family] >= 1:
+
+                active_families.discard(
                     family
-                ].beta += 1
+                )
+
+                print(
+                    f"    Retiring {family} "
+                    "from this search."
+                )
 
             continue
 
@@ -635,11 +705,10 @@ def main():
         "seed_queries":
             len(SEED_ATTACKS),
 
-        "generated_queries":
-            (
-                TARGET_QUERY_BUDGET
-                - len(SEED_ATTACKS)
-            ),
+        "generated_queries": (
+            query_number
+            - len(SEED_ATTACKS)
+        ),
 
         "reward":
             "binary decision change",
@@ -684,8 +753,8 @@ def main():
     print()
 
     print(
-        f"Target queries: "
-        f"{TARGET_QUERY_BUDGET}"
+        f"Queries actually executed: "
+        f"{query_number}"
     )
 
     print(

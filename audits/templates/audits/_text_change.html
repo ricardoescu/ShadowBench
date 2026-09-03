@@ -1,0 +1,49 @@
+<div class="actual-change">
+
+    <div class="actual-change-label">
+        What changed
+    </div>
+
+    {% if node.text_change.kind == "addition" %}
+
+        <div class="added-text">
+            <span class="plus">+</span>
+
+            <span>
+                “{{ node.text_change.added }}”
+            </span>
+        </div>
+
+    {% else %}
+
+        <div class="word-edits">
+
+            {% for edit in node.text_change.edits %}
+
+                <div class="word-edit">
+
+                    {% if edit.before %}
+                        <span class="before-text">
+                            {{ edit.before }}
+                        </span>
+                    {% endif %}
+
+                    <span class="edit-arrow">
+                        →
+                    </span>
+
+                    {% if edit.after %}
+                        <span class="after-text">
+                            {{ edit.after }}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+</div>

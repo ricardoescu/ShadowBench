@@ -1545,5 +1545,113 @@
       "action": 2,
       "reason": "The constituent's situation involves a financial emergency due to an administrative error, requiring prompt intervention or referral."
     }
+  },
+  "3f5178f0f179a791f8aa1a1977e9df2425f8ad6c795315dcb1e0d3f3b4254567": {
+    "model": "qwen3:1.7b",
+    "cache_id": "qwen3:1.7b:58145cad16b8",
+    "prompt": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected. I enjoy collecting vintage coins and my favourite colour is blue.",
+    "result": {
+      "action": 2,
+      "reason": "The constituent's situation involves a financial emergency due to an administrative error, requiring prompt intervention or referral."
+    }
+  },
+  "228aa88bd31f813888147d00d545fb991aa4396bb3d0256bbf038497790c3815": {
+    "model": "qwen3:1.7b",
+    "cache_id": "qwen3:1.7b:58145cad16b8",
+    "prompt": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected. The communication quality is slightly poor, and the text was slightly misspelled.",
+    "result": {
+      "action": 2,
+      "reason": "The constituent's situation involves a severe financial hardship due to an administrative error, requiring prompt intervention or referral to support services."
+    }
+  },
+  "8e5b4770072001f484ca4e459205309de4069335c24e6eec56d060978c8e9a07": {
+    "model": "qwen3:1.7b",
+    "cache_id": "qwen3:1.7b:58145cad16b8",
+    "prompt": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and I am frustrated that I have been unable to get the issue corrected.",
+    "result": {
+      "action": 2,
+      "reason": "The constituent's situation involves a financial emergency due to an administrative error, requiring prompt intervention or referral to support services."
+    }
+  },
+  "01f314fc4b9ace390a9a566e4df9c0f271dba30d288de2a8bbc9b78698e41390": {
+    "model": "qwen3:1.7b",
+    "cache_id": "qwen3:1.7b:58145cad16b8",
+    "prompt": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected. I enjoy playing board games in my free time.",
+    "result": {
+      "action": 2,
+      "reason": "The constituent's situation involves a severe financial hardship due to an administrative error, requiring prompt intervention or referral to support services."
+    }
+  },
+  "80cb10e325f330bbc29953e41d3b00b2df8872b7bb9a14857c21cd6443976dea": {
+    "model": "qwen3:1.7b",
+    "cache_id": "qwen3:1.7b:58145cad16b8",
+    "prompt": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected. I enjoy collecting vintage coins.",
+    "result": {
+      "action": 2,
+      "reason": "The constituent's situation involves a financial emergency due to an administrative error, requiring prompt intervention or referral."
+    }
+  },
+  "19bb70d15ea4e4498de98273d00ce6cc90e556306d422fb083e707ecb8394ba0": {
+    "model": "qwen3:1.7b",
+    "cache_id": "qwen3:1.7b:58145cad16b8",
+    "prompt": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected. I enjoy playing video games in my free time.",
+    "result": {
+      "action": 2,
+      "reason": "The constituent's situation involves a financial emergency due to an administrative error, requiring prompt intervention or referral to support services."
+    }
+  },
+  "8c9ea21600097549129c5757a4f040cf24ce409cefaf9cf5e0980d74555c564e": {
+    "model": "qwen3:1.7b",
+    "cache_id": "qwen3:1.7b:58145cad16b8",
+    "prompt": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected. I enjoy watching documentaries on Netflix in my free time.",
+    "result": {
+      "action": 2,
+      "reason": "The constituent's situation involves a severe financial hardship due to an administrative error, requiring prompt intervention or referral to social services or financial assistance programs."
+    }
+  },
+  "7fa83977705b34907103c1956550e2566233e15dc43a7f4a2a7c0eaeb6c8b1af": {
+    "model": "qwen3:1.7b",
+    "cache_id": "qwen3:1.7b:58145cad16b8",
+    "prompt": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected. I enjoy painting with watercolors in my free time.",
+    "result": {
+      "action": 2,
+      "reason": "The constituent's situation involves financial hardship and a potential risk to basic needs, requiring prompt intervention or referral."
+    }
+  },
+  "89238c967bb95bd85200cd3fef2dd2e9c84c4653d90c026bbe996e3cf708865f": {
+    "model": "qwen3:1.7b",
+    "cache_id": "qwen3:1.7b:58145cad16b8",
+    "prompt": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and I feel completely overwhelmed by the situation.",
+    "result": {
+      "action": 2,
+      "reason": "The constituent is in immediate danger due to financial instability and emotional overwhelm caused by an administrative error."
+    }
+  },
+  "5c7fa0fe7fe3caeb5163b1b03cd29c2e9738113a0b0a9cc45f24d67a8a962a4e": {
+    "model": "qwen3:1.7b",
+    "cache_id": "qwen3:1.7b:58145cad16b8",
+    "prompt": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected. I enjoy baking cookies in my free time.",
+    "result": {
+      "action": 2,
+      "reason": "The constituent's situation involves a severe financial hardship due to an administrative error, requiring prompt intervention or referral to support services."
+    }
+  },
+  "bd024eb1237e11379bc89b8bd3a12995a35f4b459e7fd1b95f6b75c85b3ae923": {
+    "model": "qwen3:1.7b",
+    "cache_id": "qwen3:1.7b:58145cad16b8",
+    "prompt": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected. I enjoy playing chess in my free time.",
+    "result": {
+      "action": 2,
+      "reason": "The constituent's situation involves financial hardship due to an administrative error, requiring prompt intervention or referral to support services."
+    }
+  },
+  "f2b72d896e1fdec8e635d468deff667c2d87266f0b43c07320e7f512a37e83e7": {
+    "model": "qwen3:1.7b",
+    "cache_id": "qwen3:1.7b:58145cad16b8",
+    "prompt": "My benefit payment was stopped because of an administrative error. I currently have almost no money for food or electricity and have been unable to get the issue corrected. I enjoy reading fiction books in my free time.",
+    "result": {
+      "action": 2,
+      "reason": "The constituent's situation involves a severe financial hardship due to an administrative error, requiring prompt intervention or referral to support services."
+    }
   }
 }

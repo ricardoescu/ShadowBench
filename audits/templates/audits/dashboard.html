@@ -240,6 +240,72 @@
             background: #f9fafb;
             border: 1px solid #e5e7eb;
         }
+        .actual-change {
+            margin-bottom: 14px;
+            padding: 12px 13px;
+            border: 1px solid #e5e7eb;
+            border-radius: 9px;
+            background: #ffffff;
+        }
+
+        .actual-change-label {
+            margin-bottom: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: #6b7280;
+        }
+
+        .added-text {
+            display: flex;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 650;
+            line-height: 1.45;
+            color: #111827;
+        }
+
+        .plus {
+            flex: 0 0 auto;
+            font-weight: 900;
+            color: #16a34a;
+        }
+
+        .word-edits {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .word-edit {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            flex-wrap: wrap;
+            font-size: 13px;
+        }
+
+        .before-text {
+            padding: 3px 6px;
+            border-radius: 5px;
+            background: #fef2f2;
+            color: #991b1b;
+            text-decoration: line-through;
+        }
+
+        .after-text {
+            padding: 3px 6px;
+            border-radius: 5px;
+            background: #f0fdf4;
+            color: #166534;
+            font-weight: 700;
+        }
+
+        .edit-arrow {
+            color: #9ca3af;
+            font-weight: 700;
+        }
 
         .probe.finding {
             border-left: 5px solid #dc2626;
@@ -311,6 +377,30 @@
                 min-height: auto;
             }
         }
+        .shadow-input {
+    margin-bottom: 14px;
+    padding: 13px 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    background: #ffffff;
+}
+
+.shadow-input-label {
+    margin-bottom: 8px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #6b7280;
+}
+
+.shadow-input-text {
+    font-size: 12px;
+    line-height: 1.5;
+    font-weight: 600;
+    color: #111827;
+    white-space: pre-wrap;
+}
     </style>
 </head>
 
@@ -485,7 +575,8 @@
         </div>
 
         <h2 class="section-title">
-            What can ShadowBench discover with 15 questions?
+            What can ShadowBench discover with a
+            {{ query_budget }}-query budget?
         </h2>
 
         <p class="section-copy">
@@ -499,43 +590,58 @@
 
         <div class="metrics">
 
-            <div class="metric">
-                <div class="metric-value">
-                    {{ search.target_query_budget }}
-                </div>
-                <div class="metric-label">
-                    target queries
-                </div>
-            </div>
-
-            <div class="metric">
-                <div class="metric-value">
-                    {{ search.total_findings }}
-                </div>
-                <div class="metric-label">
-                    decision changes found
-                </div>
-            </div>
-
-            <div class="metric">
-                <div class="metric-value">
-                    5 / 5
-                </div>
-                <div class="metric-label">
-                    irrelevant-context probes changed decision
-                </div>
-            </div>
-
-            <div class="metric">
-                <div class="metric-value">
-                    0 / 1
-                </div>
-                <div class="metric-label">
-                    writing-noise probes changed decision
-                </div>
-            </div>
-
+    <div class="metric">
+        <div class="metric-value">
+            {{ queries_executed }}
+            /
+            {{ query_budget }}
         </div>
+
+        <div class="metric-label">
+            query budget executed
+        </div>
+    </div>
+
+
+    <div class="metric">
+        <div class="metric-value">
+            {{ search.total_findings }}
+        </div>
+
+        <div class="metric-label">
+            decision changes found
+        </div>
+    </div>
+
+
+    <div class="metric">
+        <div class="metric-value">
+            {{ context_findings }}
+            /
+            {{ context_tests }}
+        </div>
+
+        <div class="metric-label">
+            irrelevant-context probes
+            changed decision
+        </div>
+    </div>
+
+
+    <div class="metric">
+        <div class="metric-value">
+            {{ writing_findings }}
+            /
+            {{ writing_tests }}
+        </div>
+
+        <div class="metric-label">
+            writing-quality probes
+            changed decision
+        </div>
+    </div>
+
+</div>
 
 
         <div class="search-panel">
@@ -588,8 +694,16 @@
                             {% endif %}
                         ">
 
-                            <div class="probe-title">
-                                {{ node.change_summary }}
+                            <div class="shadow-input">
+
+                                <div class="shadow-input-label">
+                                    Exact shadow input
+                                </div>
+
+                                <div class="shadow-input-text">
+                                    {{ node.candidate_text }}
+                                </div>
+
                             </div>
 
                             <div class="
@@ -650,8 +764,16 @@
                             {% endif %}
                         ">
 
-                            <div class="probe-title">
-                                {{ node.change_summary }}
+                            <div class="shadow-input">
+
+                                <div class="shadow-input-label">
+                                    Exact shadow input
+                                </div>
+
+                                <div class="shadow-input-text">
+                                    {{ node.candidate_text }}
+                                </div>
+
                             </div>
 
                             <div class="
@@ -714,8 +836,16 @@
                             {% endif %}
                         ">
 
-                            <div class="probe-title">
-                                {{ node.change_summary }}
+                            <div class="shadow-input">
+
+                                <div class="shadow-input-label">
+                                    Exact shadow input
+                                </div>
+
+                                <div class="shadow-input-text">
+                                    {{ node.candidate_text }}
+                                </div>
+
                             </div>
 
                             <div class="
@@ -765,10 +895,12 @@
                 </h3>
 
                 <p>
-                    Adding clearly irrelevant semantic context
-                    repeatedly reduced an urgent benefits case from
-                    priority 3 to priority 2. Light spelling noise
-                    left the original priority unchanged.
+                    In this targeted search, all nine valid
+                    irrelevant-context probes reduced the case from
+                    urgent / time-critical to priority casework.
+                    Communication-style changes also exposed
+                    sensitivity, while the initial spelling-noise
+                    control left the decision unchanged.
                 </p>
 
             </div>

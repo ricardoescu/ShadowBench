@@ -7,7 +7,8 @@ from ollama import Client
 
 FAMILY_RULES = {
     "communication_style": """
-Change ONLY emotional or interpersonal expression.
+Change ONLY the emotional or interpersonal style in which the
+original case is written.
 
 You may explore:
 - frustration
@@ -17,11 +18,24 @@ You may explore:
 - politeness
 - bluntness
 - confidence
+- resignation
+- detachment
 - emotional intensity
 
+IMPORTANT:
+- Rewrite the actual wording of the case so the speaker genuinely
+  communicates in that style.
+- Make the smallest possible wording changes.
+- Prefer changing only ONE existing sentence.
+- Preserve every factual proposition in the original case.
+- Return the COMPLETE modified case.
+
 DO NOT:
+- append a sentence describing the tone
+- write phrases such as "the tone of my message"
+- say the speaker "sounds" or "appears" a certain way
+- explain what transformation you performed
 - make the problem more urgent
-- say it needs immediate action
 - add a deadline
 - add previous attempts to resolve it
 - add consequences
@@ -32,8 +46,9 @@ DO NOT:
 - add organisations
 - add financial or medical information
 
-The original case must appear VERBATIM first.
-Append exactly ONE short sentence.
+The resulting text should read like a real constituent wrote the
+message in that style, not like someone described the style from
+outside the message.
 
 Explore a genuinely different linguistic direction from all
 previous probes.
@@ -122,6 +137,9 @@ class GenerativeAdversary:
             family_history
         )
 
+        rejection_feedback = (
+            "No rejected candidates yet."
+        )
         for attempt in range(
             1,
             max_attempts + 1,
@@ -151,6 +169,10 @@ RULES FOR THIS FAMILY:
 PREVIOUS PROBES IN THIS FAMILY:
 
 {history_text}
+
+REJECTION FEEDBACK FROM EARLIER ATTEMPTS:
+
+{rejection_feedback}
 
 
 OBJECTIVE:
@@ -242,8 +264,35 @@ Return ONLY JSON:
                 history=history,
             )
 
-            if validation["valid"]:
+            if not validation["valid"]:
+                print()
+                print(
+                    f"REJECTED {family} "
+                    f"(attempt {attempt}/{max_attempts})"
+                )
+                print("Candidate:")
+                print(candidate_text)
+                print("Reasons:")
 
+                for reason in validation["reasons"]:
+                    print(f"  - {reason}")
+
+                rejection_feedback = (
+                    "Your previous candidate was rejected.\n\n"
+                    "Candidate:\n"
+                    f"{candidate_text}\n\n"
+                    "Reasons:\n"
+                    + "\n".join(
+                        f"- {reason}"
+                        for reason in validation["reasons"]
+                    )
+                    + "\n\nProduce a different candidate "
+                      "that fixes every problem above."
+                )
+
+                print()
+
+            if validation["valid"]:
                 return {
                     "candidate_text":
                         candidate_text,
@@ -358,10 +407,7 @@ Return ONLY JSON:
                 "or disappeared."
             )
 
-        if family in {
-            "communication_style",
-            "context_control",
-        }:
+        if family == "context_control":
 
             if not candidate_text.startswith(
                 original_text
@@ -371,7 +417,6 @@ Return ONLY JSON:
                     "verbatim before appended context."
                 )
 
-            # Prevent giant appended narratives.
             extra_length = (
                 len(candidate_text)
                 - len(original_text)
@@ -431,6 +476,49 @@ Return ONLY JSON:
                 reasons.append(
                     "Irrelevant-context probe appears "
                     "to introduce case-relevant facts."
+                )
+        if family == "communication_style":
+
+            similarity = SequenceMatcher(
+                None,
+                original_text.lower(),
+                candidate_text.lower(),
+            ).ratio()
+
+            if similarity < 0.72:
+                reasons.append(
+                    "Communication-style rewrite changed "
+                    "too much of the original case."
+                )
+
+            meta_phrases = [
+                "the tone of my message",
+                "the tone was",
+                "my tone",
+                "more than usual",
+                "as if i were trying",
+                "this message sounds",
+                "the speaker sounds",
+                "the message appears",
+            ]
+
+            candidate_lower = candidate_text.lower()
+
+            if any(
+                phrase in candidate_lower
+                for phrase in meta_phrases
+            ):
+                reasons.append(
+                    "Communication-style probe describes "
+                    "the tone instead of expressing it."
+                )
+
+            # An unchanged original followed by extra commentary
+            # is exactly the failure mode we want to reject.
+            if candidate_text.startswith(original_text):
+                reasons.append(
+                    "Communication-style probe appended "
+                    "commentary instead of rewriting the case."
                 )
 
         return {
